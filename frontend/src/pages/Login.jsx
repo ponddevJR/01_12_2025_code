@@ -1,68 +1,122 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { Lock, User, LogIn, GraduationCap } from "lucide-react";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const token = localStorage.getItem("loginToken");
-    if (token) return (location.href = "/dashboard");
-  }, []);
+  const handleLogin = () => {
+    setIsLoading(true);
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    if (username === "663170010324" && password === "663170010324") {
-      const token = "login token";
-      localStorage.setItem("loginToken", token);
-      location.href = "/dashboard";
-    } else {
-      return alert("รหัสผ่านไม่ถูกต้อง");
+    setTimeout(() => {
+      if (username === "663170010324" && password === "663170010324") {
+        localStorage.setItem("loginToken", "login token");
+        alert("✅ เข้าสู่ระบบสำเร็จ!");
+        setIsLoading(false);
+        location.href = "/dashboard";
+      } else {
+        setIsLoading(false);
+        alert("❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง");
+      }
+    }, 800);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleLogin();
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-linear-150 from-blue-500 to-cyan-700 p-4">
-      <div className="bg-white/20 backdrop-blur-lg shadow-xl rounded-2xl p-8 w-full max-w-sm border border-white/30">
-        <h2 className="text-2xl font-bold text-white text-center mb-6">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 via-indigo-700 to-purple-800 p-4 relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-1/2 -left-1/4 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-1/2 -right-1/4 w-96 h-96 bg-purple-400/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+      </div>
+
+      <div className="relative z-10 bg-white/10 backdrop-blur-xl shadow-2xl rounded-3xl p-8 w-full max-w-md border border-white/20">
+        {/* Logo/Icon */}
+        <div className="flex justify-center mb-6">
+          <div className="w-20 h-20 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-2xl flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+            <GraduationCap className="w-10 h-10 text-white" />
+          </div>
+        </div>
+
+        {/* Title */}
+        <h2 className="text-3xl font-bold text-white text-center mb-2">
           ระบบเช็คชื่อเข้าเรียน
         </h2>
+        <p className="text-white/70 text-center mb-8 text-sm">
+          เข้าสู่ระบบเพื่อเริ่มต้นการใช้งาน
+        </p>
 
-        <form onSubmit={handleLogin} className="flex flex-col space-y-4">
+        {/* Form */}
+        <div className="space-y-5">
+          {/* Username Field */}
           <div>
-            <label className="text-white font-semibold">ชื่อผู้ใช้</label>
-            <input
-              type="text"
-              className="mt-1 w-full p-3 rounded-lg bg-white outline-none focus:ring-2 focus:ring-blue-300"
-              placeholder="กรอกชื่อผู้ใช้"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
+            <label className="text-white font-semibold mb-2 block flex items-center gap-2">
+              <User className="w-4 h-4" />
+              ชื่อผู้ใช้
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                className="w-full p-3 pl-11 rounded-xl bg-white/90 text-gray-800 outline-none focus:ring-2 focus:ring-blue-400 transition shadow-sm"
+                placeholder="กรอกชื่อผู้ใช้"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                onKeyPress={handleKeyPress}
+              />
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            </div>
           </div>
 
+          {/* Password Field */}
           <div>
-            <label className="text-white font-semibold">รหัสผ่าน</label>
-            <input
-              type="password"
-              className="mt-1 w-full p-3 rounded-lg bg-white outline-none focus:ring-2 focus:ring-blue-300"
-              placeholder="กรอกรหัสผ่าน"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <label className="text-white font-semibold mb-2 block flex items-center gap-2">
+              <Lock className="w-4 h-4" />
+              รหัสผ่าน
+            </label>
+            <div className="relative">
+              <input
+                type="password"
+                className="w-full p-3 pl-11 rounded-xl bg-white/90 text-gray-800 outline-none focus:ring-2 focus:ring-blue-400 transition shadow-sm"
+                placeholder="กรอกรหัสผ่าน"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onKeyPress={handleKeyPress}
+              />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            </div>
           </div>
 
+          {/* Login Button */}
           <button
-            type="submit"
-            className="w-full py-3 bg-blue-600 hover:bg-blue-700 transition text-white rounded-lg font-semibold"
+            onClick={handleLogin}
+            disabled={isLoading}
+            className="w-full py-3 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 transition text-white rounded-xl font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            เข้าสู่ระบบ
+            {isLoading ? (
+              <>
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                <span>กำลังเข้าสู่ระบบ...</span>
+              </>
+            ) : (
+              <>
+                <LogIn className="w-5 h-5" />
+                <span>เข้าสู่ระบบ</span>
+              </>
+            )}
           </button>
 
-          <p className="text-center text-white/90 text-sm mt-4">
-            © {new Date().getFullYear()} ระบบเช็คชื่อเข้าเรียน
+          {/* Footer */}
+          <p className="text-center text-white/60 text-xs mt-6">
+            © {new Date().getFullYear()} ระบบเช็คชื่อเข้าเรียน - All Rights
+            Reserved
           </p>
-        </form>
+        </div>
       </div>
     </div>
   );
