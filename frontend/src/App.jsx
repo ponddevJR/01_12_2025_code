@@ -1,10 +1,17 @@
-import StudentFormComponent from "./pages/StudentFormComponent";
-
-const Main = () => {
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
+import Login from "./pages/Login";
+import Profile from "./pages/Profile";
+function App() {
   return (
-    <div className="w-screen bg-linear-120 from-pink-200 to-blue-300 h-screen flex flex-col items-center justify-center">
-      <StudentFormComponent />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/profile" element={<Profile />} />
+      </Routes>
+    </Router>
   );
-};
-export default Main;
+}
+
+export default App;

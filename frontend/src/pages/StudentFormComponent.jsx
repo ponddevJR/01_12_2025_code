@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import StdList from "../components/std-list";
-import { Trash } from "lucide-react";
 
-export default function StudentForm() {
+function StudentForm() {
   const [studentData, setStudentData] = useState([]);
   const [fullname, setFullname] = useState("");
   const [studentId, setStudentId] = useState("");
@@ -161,3 +160,5 @@ export default function StudentForm() {
     </div>
   );
 }
+
+export default StudentForm;

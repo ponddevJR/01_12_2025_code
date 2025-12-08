@@ -40,7 +40,7 @@ const StdList = ({ data, setStudentData }) => {
         }  w-fit h-fit flex items-center gap-2 shadow-md bg-gray-100`}
       >
         {data?.status ? (
-          "เช็คชื่อแล้ว"
+          "เช็คชื่อsแล้ว"
         ) : (
           <>
             <Check size={20} />
