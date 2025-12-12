@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Lock, User, LogIn, GraduationCap } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -110,6 +111,18 @@ export default function Login() {
               </>
             )}
           </button>
+
+          <div className="text-center mt-4">
+            <p className="text-white/70 text-sm">
+              ยังไม่มีบัญชี?{" "}
+              <Link
+                to={"register/"}
+                className="text-emerald-300 hover:text-emerald-200 font-semibold underline"
+              >
+                ลงทะเบียน
+              </Link>
+            </p>
+          </div>
 
           {/* Footer */}
           <p className="text-center text-white/60 text-xs mt-6">

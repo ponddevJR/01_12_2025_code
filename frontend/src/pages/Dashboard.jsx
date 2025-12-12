@@ -87,6 +87,12 @@ function Dashboard() {
             >
               Profile
             </Link>
+            <Link
+              to="/crud/subject"
+              className="hover:text-blue-300 transition font-medium"
+            >
+              Subject
+            </Link>
             <button
               onClick={handleLogout}
               className="bg-red-500/20 hover:bg-red-500/30 px-4 py-2 rounded-lg transition font-medium border border-red-400/30"
