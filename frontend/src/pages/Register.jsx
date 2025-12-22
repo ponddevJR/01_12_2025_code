@@ -10,6 +10,8 @@ import {
   CreditCard,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { API_URL } from "./Subject";
 function Register() {
   const [formData, setFormData] = useState({
     fullName: "",
@@ -27,13 +29,13 @@ function Register() {
     setFormData({ ...formData, [field]: value });
   };
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     // Validation
     if (!formData.fullName.trim()) return alert("⚠️ กรุณากรอกชื่อ-นามสกุล");
     if (!formData.studentId.trim()) return alert("⚠️ กรุณากรอกรหัสนักเรียน");
-    if (!formData.email.trim()) return alert("⚠️ กรุณากรอกอีเมล");
-    if (!formData.phone.trim()) return alert("⚠️ กรุณากรอกเบอร์โทรศัพท์");
-    if (!formData.classRoom.trim()) return alert("⚠️ กรุณากรอกห้องเรียน");
+    // if (!formData.email.trim()) return alert("⚠️ กรุณากรอกอีเมล");
+    // if (!formData.phone.trim()) return alert("⚠️ กรุณากรอกเบอร์โทรศัพท์");
+    // if (!formData.classRoom.trim()) return alert("⚠️ กรุณากรอกห้องเรียน");
     if (!formData.username.trim()) return alert("⚠️ กรุณากรอกชื่อผู้ใช้");
     if (!formData.password.trim()) return alert("⚠️ กรุณากรอกรหัสผ่าน");
 
@@ -47,28 +49,30 @@ function Register() {
 
     setIsLoading(true);
 
-    setTimeout(() => {
-      alert(
-        "✅ ลงทะเบียนสำเร็จ!\n\nข้อมูลของคุณ:\n" +
-          `👤 ชื่อ: ${formData.fullName}\n` +
-          `🆔 รหัส: ${formData.studentId}\n` +
-          `📚 ห้อง: ${formData.classRoom}\n` +
-          `📧 อีเมล: ${formData.email}`
-      );
+    try {
+      const res = await axios.post(`${API_URL}/create-std`, formData);
+      if (res.data.err) {
+        alert(res.data.err);
+      }
+      if (res.status === 200) {
+        alert("ลงทะเบียนสำเร็จ");
+        setFormData({
+          fullName: "",
+          studentId: "",
+          email: "",
+          phone: "",
+          classRoom: "",
+          username: "",
+          password: "",
+          confirmPassword: "",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error);
+    } finally {
       setIsLoading(false);
-
-      // Reset form
-      setFormData({
-        fullName: "",
-        studentId: "",
-        email: "",
-        phone: "",
-        classRoom: "",
-        username: "",
-        password: "",
-        confirmPassword: "",
-      });
-    }, 1000);
+    }
   };
 
   const handleKeyPress = (e) => {
@@ -143,65 +147,8 @@ function Register() {
             </div>
           </div>
 
-          {/* Row 2: Email & Phone */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="text-white font-semibold mb-2 block flex items-center gap-2 text-sm">
-                <Mail className="w-4 h-4" />
-                อีเมล
-              </label>
-              <div className="relative">
-                <input
-                  type="email"
-                  className="w-full p-3 pl-10 rounded-xl bg-white/90 text-gray-800 outline-none focus:ring-2 focus:ring-emerald-400 transition shadow-sm text-sm"
-                  placeholder="example@email.com"
-                  value={formData.email}
-                  onChange={(e) => handleChange("email", e.target.value)}
-                  onKeyPress={handleKeyPress}
-                />
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              </div>
-            </div>
-
-            <div>
-              <label className="text-white font-semibold mb-2 block flex items-center gap-2 text-sm">
-                <Phone className="w-4 h-4" />
-                เบอร์โทรศัพท์
-              </label>
-              <div className="relative">
-                <input
-                  type="tel"
-                  className="w-full p-3 pl-10 rounded-xl bg-white/90 text-gray-800 outline-none focus:ring-2 focus:ring-emerald-400 transition shadow-sm text-sm"
-                  placeholder="081-234-5678"
-                  value={formData.phone}
-                  onChange={(e) => handleChange("phone", e.target.value)}
-                  onKeyPress={handleKeyPress}
-                />
-                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              </div>
-            </div>
-          </div>
-
           {/* Row 3: Classroom & Username */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="text-white font-semibold mb-2 block flex items-center gap-2 text-sm">
-                <BookOpen className="w-4 h-4" />
-                ห้องเรียน
-              </label>
-              <div className="relative">
-                <input
-                  type="text"
-                  className="w-full p-3 pl-10 rounded-xl bg-white/90 text-gray-800 outline-none focus:ring-2 focus:ring-emerald-400 transition shadow-sm text-sm"
-                  placeholder="ม.4/1"
-                  value={formData.classRoom}
-                  onChange={(e) => handleChange("classRoom", e.target.value)}
-                  onKeyPress={handleKeyPress}
-                />
-                <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              </div>
-            </div>
-
             <div>
               <label className="text-white font-semibold mb-2 block flex items-center gap-2 text-sm">
                 <User className="w-4 h-4" />

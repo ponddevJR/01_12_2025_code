@@ -82,16 +82,22 @@ function Dashboard() {
               Dashboard
             </Link>
             <Link
-              to="/profile"
+              to="/my-profile"
               className="hover:text-blue-300 transition font-medium"
             >
-              Profile
+              MyProfile
             </Link>
             <Link
               to="/crud/subject"
               className="hover:text-blue-300 transition font-medium"
             >
               Subject
+            </Link>
+            <Link
+              to="/users"
+              className="hover:text-blue-300 transition font-medium"
+            >
+              Users
             </Link>
             <button
               onClick={handleLogout}

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Plus, Edit2, Trash2, X, Save, BookOpen, Loader2 } from "lucide-react";
 
+export const API_URL = import.meta.env.VITE_API;
+
 export default function CourseCRUD() {
   const [courses, setCourses] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,7 +15,6 @@ export default function CourseCRUD() {
   });
 
   // เปลี่ยน URL ตามที่คุณตั้งค่าใน .env
-  const API_URL = import.meta.env.VITE_API;
 
   // Load data from API on mount
   useEffect(() => {

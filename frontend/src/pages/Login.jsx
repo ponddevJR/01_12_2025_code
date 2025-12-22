@@ -1,26 +1,32 @@
 import { useState } from "react";
 import { Lock, User, LogIn, GraduationCap } from "lucide-react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { API_URL } from "./Subject";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     setIsLoading(true);
+    if (!username || !password) return alert("ไม่พบข้อมูล");
 
-    setTimeout(() => {
-      if (username === "663170010324" && password === "663170010324") {
-        localStorage.setItem("loginToken", "login token");
-        alert("✅ เข้าสู่ระบบสำเร็จ!");
-        setIsLoading(false);
-        location.href = "/dashboard";
-      } else {
-        setIsLoading(false);
-        alert("❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง");
+    try {
+      const res = await axios.post(`${API_URL}/login`, { username, password });
+      if (res.data.err) return alert(res.data.err);
+      if (res.status === 200) {
+        localStorage.setItem("loginToken", JSON.stringify(res.data));
+        alert("เข้าสู่ระบบสำเร็จ");
+        location.href = "/my-profile";
       }
-    }, 800);
+    } catch (error) {
+      console.error(error);
+      alert(JSON.stringify(error));
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleKeyPress = (e) => {

@@ -4,12 +4,14 @@ const cors = require("cors");
 const app = express();
 require("dotenv").config();
 const morgan = require("morgan");
+const { default: stdRoute } = require("./routes/std.route");
 
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 
 app.use(subjectRoute);
+app.use(stdRoute);
 
 app.get("/health", async (req, res) => {
   res.json({ status: "OK" });
