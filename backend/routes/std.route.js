@@ -10,7 +10,7 @@ stdRoute.post("/create-std", async (req, res) => {
 
     const where = `select * from students where username = $1 or std_class_id = $2`;
     const fintExitStd = await pool.query(where, [username, studentId]);
-    if (fintExitStd)
+    if (fintExitStd.rows.length > 0)
       return res.json({
         err: "มีข้อมูลรหัสนักศึกษานี้หรือ username นี้อยู่แล้ว",
       });

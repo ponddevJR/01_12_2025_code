@@ -52,7 +52,7 @@ function Register() {
     try {
       const res = await axios.post(`${API_URL}/create-std`, formData);
       if (res.data.err) {
-        alert(res.data.err);
+        return alert(res.data.err);
       }
       if (res.status === 200) {
         alert("ลงทะเบียนสำเร็จ");

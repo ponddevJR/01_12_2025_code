@@ -84,7 +84,7 @@ export default function MyProfile() {
       <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-800">
-            ข้อมูลโปรไฟล์ผู้กักขัง
+            ข้อมูลโปรไฟล์ของฉัน
           </h1>
 
           {!isEditing && (
