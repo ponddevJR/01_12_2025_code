@@ -85,20 +85,21 @@ function Dashboard() {
               to="/my-profile"
               className="hover:text-blue-300 transition font-medium"
             >
-              MyProfile
+              โปรไฟล์
             </Link>
             <Link
               to="/crud/subject"
               className="hover:text-blue-300 transition font-medium"
             >
-              Subject
+              รายวิชา
             </Link>
             <Link
               to="/users"
               className="hover:text-blue-300 transition font-medium"
             >
-              Users
+              ผู้ใข้งาน
             </Link>
+
             <button
               onClick={handleLogout}
               className="bg-red-500/20 hover:bg-red-500/30 px-4 py-2 rounded-lg transition font-medium border border-red-400/30"

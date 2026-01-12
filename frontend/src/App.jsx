@@ -6,6 +6,9 @@ import Register from "./pages/Register";
 import Subject from "./pages/Subject";
 import Myprofile from "./pages/Myprofile";
 import Users from "./pages/Users";
+import CheckClass from "./pages/CheckClass";
+import StudentAttendanceDetail from "./pages/ClassDetail";
+import StdCheckClass from "./pages/StdCheckClass";
 function App() {
   return (
     <Router>
@@ -17,6 +20,15 @@ function App() {
         <Route path="/crud/subject" element={<Subject />} />
         <Route path="/my-profile" element={<Myprofile />} />
         <Route path="/users" element={<Users />} />
+        <Route path="/check-class/:classId" element={<CheckClass />} />
+        <Route
+          path="/class-detail/:classId/:stdId"
+          element={<StudentAttendanceDetail />}
+        />
+        <Route
+          path="/check-manual/:classId/:stdId"
+          element={<StdCheckClass />}
+        />
       </Routes>
     </Router>
   );

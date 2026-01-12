@@ -1,5 +1,6 @@
 import { Router } from "express";
 import pool from "../config/pg.js";
+import upload from "../middleware/upload.js";
 const stdRoute = Router();
 
 stdRoute.post("/create-std", async (req, res) => {
@@ -72,7 +73,7 @@ stdRoute.post("/login", async (req, res) => {
   }
 });
 
-stdRoute.put("/students/:id", async (req, res) => {
+stdRoute.post("/students/:id", async (req, res) => {
   try {
     const { id } = req.params;
     console.log("🚀 ~ req.params:", req.params);
@@ -189,18 +190,21 @@ stdRoute.delete("/students/:id", async (req, res) => {
 stdRoute.get("/students", async (req, res) => {
   try {
     const query = `
-      SELECT
-        student_id,
-        fullname,
-        std_class_id,
-        username,
-        major
-      FROM students
+   SELECT
+  s.student_id,
+  s.fullname,
+  s.std_class_id,
+  s.username,
+  s.major,
+  a.checkin_time,
+  a.status
+FROM students s
+LEFT JOIN attendance a
+  ON s.student_id = a.student_id;
 
     `;
 
     const result = await pool.query(query);
-
     return res.status(200).json({
       total: result.rows.length,
       data: result.rows,
@@ -208,6 +212,26 @@ stdRoute.get("/students", async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({ err: "Internal server error" });
+  }
+});
+
+stdRoute.post("/check-class", upload.single("leavDoc"), async (req, res) => {
+  try {
+    const { status, classId, stdId } = req.body;
+    const filePath = req.file ? req.file.path : null;
+
+    const query = `
+        INSERT INTO attendance
+        (course_id, student_id, checkin_time, status, leave_file)
+        VALUES ($1, $2, $3, $4, $5)
+      `;
+
+    await pool.query(query, [classId, stdId, new Date(), status, filePath]);
+
+    res.json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ err: "Upload failed" });
   }
 });
 

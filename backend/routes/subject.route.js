@@ -67,6 +67,7 @@ subjectRoute.get("/get-all-subjects", async (req, res) => {
 subjectRoute.get("/get-subject/:id", async (req, res) => {
   try {
     const { id } = req.params;
+    console.log("🚀 ~ id:", id);
     const query = `SELECT * FROM courses WHERE course_id = $1`;
     const result = await pool.query(query, [id]);
 
@@ -148,6 +149,56 @@ subjectRoute.delete("/delete-subject/:id", async (req, res) => {
     res.status(500).json({
       error: "เกิดข้อผิดพลาดในการลบข้อมูล",
     });
+  }
+});
+
+subjectRoute.get("/get-class-detail/:classId/:stdId", async (req, res) => {
+  try {
+    const { classId, stdId } = req.params;
+    const queryData = `SELECT
+  s.student_id,
+  s.fullname,
+  s.major,
+  s.username,
+  s.std_class_id,
+
+  c.course_id,
+  c.course_name,
+  c.teacher_name,
+
+  a.checkin_time,
+  a.status
+FROM attendance a
+JOIN students s
+  ON a.student_id = s.student_id
+JOIN courses c
+  ON a.course_id = c.course_id
+WHERE s.student_id = $1
+  AND c.course_id = $2
+`;
+
+    const data = await pool.query(queryData, [stdId, classId]);
+    console.log("🚀 ~ data:", data);
+
+    const statisticQuery = `SELECT
+  COUNT(*) AS total,
+
+  COUNT(*) FILTER (WHERE status = 'มาเรียน') AS present,
+  COUNT(*) FILTER (WHERE status = 'มาสาย')    AS late,
+  COUNT(*) FILTER (WHERE status = 'ขาด')  AS absent,
+  COUNT(*) FILTER (WHERE status = 'ลา')   AS leave
+FROM attendance
+WHERE student_id = $1
+  AND course_id = $2;
+`;
+
+    const statistics = await pool.query(statisticQuery, [stdId, classId]);
+    return res
+      .status(200)
+      .json({ data: data.rows, statistics: statistics.rows });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ err: "error" });
   }
 });
 

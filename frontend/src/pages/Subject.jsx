@@ -1,9 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { Plus, Edit2, Trash2, X, Save, BookOpen, Loader2 } from "lucide-react";
+import {
+  Plus,
+  Edit2,
+  Trash2,
+  X,
+  Save,
+  BookOpen,
+  Loader2,
+  CheckCircle,
+  FileText,
+  Home,
+} from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const API_URL = import.meta.env.VITE_API;
 
 export default function CourseCRUD() {
+  const token = JSON.parse(localStorage.getItem("loginToken"));
+
   const [courses, setCourses] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCourse, setEditingCourse] = useState(null);
@@ -148,6 +162,10 @@ export default function CourseCRUD() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6">
+      <Link className="mb-2 flex items-center gap-2" to={"/dashboard"}>
+        <Home />
+        <p>หน้าหลัก</p>
+      </Link>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="bg-white rounded-2xl shadow-xl p-8 mb-6">
@@ -225,7 +243,16 @@ export default function CourseCRUD() {
                         </span>
                       </td>
                       <td className="px-6 py-4 text-gray-800 font-medium">
-                        {course.course_name}
+                        <Link
+                          to={`/check-manual/${course.course_id}/${
+                            JSON.parse(localStorage.getItem("loginToken"))
+                              .data?.student_id
+                          }`}
+                          className="hover:text-blue-500 hover:underline"
+                        >
+                          {" "}
+                          {course.course_name}
+                        </Link>
                       </td>
                       <td className="px-6 py-4 text-gray-700">
                         {course.teacher_name}
@@ -250,6 +277,20 @@ export default function CourseCRUD() {
                             <Trash2 className="w-4 h-4" />
                             <span className="text-sm">ลบ</span>
                           </button>
+                          <Link
+                            className="flex items-center gap-2 p-2 rounded-md text-white bg-green-500"
+                            to={`/check-class/${course.course_id}`}
+                          >
+                            <CheckCircle size={18} />
+                            เช็คชื่อ
+                          </Link>
+                          <Link
+                            className="flex items-center gap-2 p-2 rounded-md text-white bg-blue-500"
+                            to={`/class-detail/${course.course_id}/${token?.data?.student_id}`}
+                          >
+                            <FileText size={18} />
+                            รายละเอียด
+                          </Link>
                         </div>
                       </td>
                     </tr>

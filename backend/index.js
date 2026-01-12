@@ -4,7 +4,8 @@ const cors = require("cors");
 const app = express();
 require("dotenv").config();
 const morgan = require("morgan");
-const { default: stdRoute } = require("./routes/std.route");
+const path = require("path");
+const { default: stdRoute } = require("./routes/std.route.js");
 
 app.use(cors());
 app.use(express.json());
@@ -12,6 +13,7 @@ app.use(morgan("dev"));
 
 app.use(subjectRoute);
 app.use(stdRoute);
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 app.get("/health", async (req, res) => {
   res.json({ status: "OK" });

@@ -8,12 +8,7 @@ export default function MyProfile() {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-
-  const [formData, setFormData] = useState({
-    stundent_id: "65001",
-    fullname: "ตนธาธา ไชย",
-    major: "เทคโนโลยีสารสนเทศ",
-  });
+  const [formData, setFormData] = useState({});
 
   const [load, setLoad] = useState(true);
   const getData = async () => {
@@ -21,7 +16,7 @@ export default function MyProfile() {
       const data = JSON.parse(localStorage.getItem("loginToken")).data;
       console.log("🚀 ~ getData ~ data:", data);
       if (!data) return (location.href = "/");
-      const res = await axios.get(`${API_URL}/students/${data?.student_id}`);
+      const res = await axios.get(API_URL + `/students/${data?.student_id}`);
       setFormData({
         stundent_id: res.data?.data?.student_id,
         fullname: res.data?.data?.fullname,
@@ -54,9 +49,13 @@ export default function MyProfile() {
 
     try {
       // ใช้ Fetch API แทน axios
-      const res = await axios.put(
+      const res = await axios.post(
         `${API_URL}/students/${formData.stundent_id}`,
         formData
+      );
+      console.log(
+        "🚀 ~ handleSubmit ~ ${API_URL}/students/${formData.stundent_id}:",
+        ` ${API_URL}/students/${formData.stundent_id}`
       );
 
       setMessage("บันทึกข้อมูลสำเร็จ!");
