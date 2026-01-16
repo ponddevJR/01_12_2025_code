@@ -277,13 +277,13 @@ export default function CourseCRUD() {
                             <Trash2 className="w-4 h-4" />
                             <span className="text-sm">ลบ</span>
                           </button>
-                          <Link
+                          {/* <Link
                             className="flex items-center gap-2 p-2 rounded-md text-white bg-green-500"
                             to={`/check-class/${course.course_id}`}
                           >
                             <CheckCircle size={18} />
                             เช็คชื่อ
-                          </Link>
+                          </Link> */}
                           <Link
                             className="flex items-center gap-2 p-2 rounded-md text-white bg-blue-500"
                             to={`/class-detail/${course.course_id}/${token?.data?.student_id}`}
